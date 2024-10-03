@@ -1,0 +1,15 @@
+{
+  "name": "node_openai_sales_assistant",
+  "version": "1.0.0",
+  "description": "AI to assist Node4 Sales",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lucas Gomes",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "openai": "^4.67.1"
+  }
+}
