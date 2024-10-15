@@ -1,13 +1,22 @@
-require("dotenv").config();
+require("dotenv").config({path: __dirname + '/.env'});
 const OpenAI = require("openai");
 const fs = require("fs");
+const path = require("path");
 
 const openai = new OpenAI();
 
 
 function readProgramStorage(){
-    let data = fs.readFileSync('./storage.json', {encoding: 'utf-8'});
+    let data = fs.readFileSync(path.join(__dirname, './storage.json'), {encoding: 'utf-8'});
     return JSON.parse(data);
+}
+
+function getParameterValue(param){
+    let paramIndex = Array.from(process.argv).findIndex((e) => e === `--${param}`);
+    if (paramIndex === -1) {
+        return "";
+    }
+    return process.argv[paramIndex + 1];
 }
 
 function writeToProgramStorage(data){
@@ -17,7 +26,7 @@ function writeToProgramStorage(data){
     } else {
         dataString = data;
     }
-    return fs.writeFileSync('./storage.json', dataString);
+    return fs.writeFileSync(path.join(__dirname, './storage.json'), dataString);
 }
 
 /**
@@ -33,7 +42,6 @@ function writeToProgramStorageFn(mutationFunction) {
 
 
 async function main(){
-
     const salesAssistantName = "Node4 Sales Assistant";
     const salesAssistantId = readProgramStorage().assistantId;
 
@@ -72,7 +80,7 @@ async function main(){
 
     console.log("assistant", assistant);
 
-    const fileStreams = ["./CaseStudies.md"].map((path) =>
+    const fileStreams = [path.join(__dirname, "./CaseStudies.md")].map((path) =>
         fs.createReadStream(path),
     );
 
@@ -169,8 +177,21 @@ async function main(){
     tool_resources: { file_search: { vector_store_ids: [vectorStore.id] } },
     });
 
-    const inputQuery = fs.readFileSync("./input.txt", "utf-8");
+    let inputQuery = '';
+    let cmdRawInput = getParameterValue('input');
+    let cmdInputFile = getParameterValue('input-file');
 
+    if (cmdRawInput) {
+        inputQuery = cmdRawInput;
+    } else if (cmdInputFile) {
+        inputQuery = fs.readFileSync(path.join(process.cwd(), cmdInputFile), "utf-8");
+    } else {
+        inputQuery = fs.readFileSync(path.join(__dirname, "./input.txt"), "utf-8");
+    }
+
+    console.log("=== INPUT QUERY === ");
+    console.log(inputQuery);
+    console.log("=== INPUT QUERY === ");
     const thread = await openai.beta.threads.create({
         messages: [
             {
@@ -260,7 +281,7 @@ async function main(){
         if (event.content[0].type === "text") {
             
             if (displayCitations) {
-                console.log(allCitations.join("\n"));
+                console.log("\n" + allCitations.join("\n"));
             }
             
             const { text } = event.content[0];
@@ -289,14 +310,9 @@ async function main(){
             }
 
 
-            let allText = text.value + citations.join("\n");
+            let allText = text.value + "\n" + citations.join("\n");
 
-            //console.log(text.value);
-            //console.log(citations.join("\n"));
-
-            console.log(allText);
-
-            fs.writeFileSync("output.md", allText);
+            fs.writeFileSync(path.join(__dirname, "./output.md"), allText);
 
             
 

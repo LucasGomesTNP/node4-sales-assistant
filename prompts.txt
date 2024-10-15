@@ -3,4 +3,4 @@ Company BigStick has multiple data sources, which makes it slow retrieve data, e
 Hi Node4, my company, Super Duper Cool Limited, is having problems in handling Orders and Stock. What can you do to help me?
 
 
-I have a farm and I don't know how raise cows, can Node4 help me?
+I have a farm and I need to raise cows, can Node4 help me?
