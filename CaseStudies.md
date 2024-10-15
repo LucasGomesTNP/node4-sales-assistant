@@ -413,3 +413,58 @@ Node4’s solution helps West Midlands Police Force comply with the regulations 
 From an administrative and budgetary standpoint, moving to the cloud has given the digital forensics team the elasticity to scale when data requirements increase. It also allows the team to pull back on capacity when the demand is not so great. This helps keep departmental IT-related costs down and enables the team to work at the same fast pace, regardless of the number of cases or data volume.
 
 DS Price KPM concludes: “There’s an honest passion from the Node4 team to get this right for us. Their support has been superb throughout the design and roll-out process, with team members going consistently above and beyond. They understand the importance of our work and the intensity and urgency that drives our department. And they’ve delivered the tools and framework that allow us to work quickly, accurately and professionally to protect some of society’s most vulnerable people.”
+
+
+# Datalex
+
+Datalex is a leading provider of cutting-edge digital transformation to companies such as Aer Lingus, Air China, EasyJet and JetBlue, creating differentiation and leadership in the digital retail space. Headquartered in Dublin, Ireland, the business has custom built software offerings for airlines, supported by around 250 employees, with a turnover of more than €20 million in 2022.
+
+## The Challenge
+
+Datalex were struggling to calculate the cost of employees and contractors through disparate systems. The month-end process was taking more than twenty days to complete. Paired with an unresponsive and difficult partner, they needed to investigate a new solution and a new partner to take them forward.
+
+**Initial exposure to Business Central and challenges**
+
+In January 2020, they planned their upgrade to Business Central and began their journey through a Business Central implementation of version 16, replacing their old accounting system Exchequer. Business Central was chosen for its flexibility and customisability through extensions technology.
+
+The core Enterprise Resource Planning (ERP) solution was implemented by an Irish partner, but further development to the system failed in 2021. Datalex wanted to add custom development for timesheet complexity to Dynamics 365 Business Central to calculate the cost for customers, projects and resources. The cost of development charged by the original partner had been over and above what they had expected for the time required. Communications had grown poor with their partner.
+
+## Solution
+
+Node4 takes on the ERP development
+
+In 2021, Datalex’s Head of Data Analytics, David de la Vega, reached out to a recommended contact who was now employed by Node4. Brendan Doyle, Node4’s Commercial Lead, was delighted to help and swiftly ensured that they had a safe home with Node4. 
+
+### Moving forward
+
+Datalex are working towards an upgrade to Business Central Online, Microsoft’s SaaS version of the product and Node4 are on hand to assist. The benefits of upgrading include:
+
+    The latest functionality.
+    An array of available APIs to connect external systems into Business Central.
+    An easier to maintain and upgraded platform.
+    And world-class security from Microsoft.
+
+There is also the 40% discount from Microsoft on licences when upgrading to Business Central, which helps to make a significant saving. This offer is called ‘Bridge to the Cloud’ and registration for the initiative must be completed before 31st December 2024. Datalex will also save on the hosting costs, as their new Business Central system will be looked after by Microsoft in the cloud, with the hosting costs absorbed into the monthly subscription.
+
+
+# Weleda
+
+Weleda manufacture holistic natural cosmetics and pharmaceuticals. Founded in 1921, they now operate in over 50 countries, employing over 2,000 people worldwide. Having implemented Dynamics NAV some years before, Weleda first got together with TNP in 2018, having received a strong recommendation. Their early experience with TNP support quickly validated the decision.
+
+
+## The Chellenge
+
+James Charters, IT Manager at Weleda, then observed that employees were “laboriously sitting in front of NAV and typing stuff in over and over again. It took a lot of time and effort and took them away from the job that they were supposed to be doing”. Many of their warehouse procedures relied heavily on a paper-based system.
+
+
+## Solution
+
+Having decided that a change needed to be made, Weleda worked with TNP to implement Tasklet, a handheld solution that is tightly integrated with Dynamics NAV. The objective was to remove the paper-based processes from within the warehouse and dispatch areas of the business.
+
+James says, “people are very impressed with the solution – it’s improved our accuracy and enables us to work in real time. You can’t do that with paper!” The project has helped them become more efficient AND advance their sustainability agenda – something that is closely aligned with their core values.
+
+
+Now Weleda are set up with Tasklet, they’re looking at how to further reduce their paper consumption across the business and are talking to TNP to build a roadmap for the future. James says, “I feel like there’s a lot more confidence with TNP than we’ve ever had in any other IT supplier relationship”. We look forward to continuing to serve.
+
+
+
