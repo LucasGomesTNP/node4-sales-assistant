@@ -331,7 +331,7 @@ async function main(){
 
 main()
 .then(() => {
-    console.log("supposedlu done");
+    console.log("supposedly done");
 })
 .catch((err) => {
     console.error(err);
