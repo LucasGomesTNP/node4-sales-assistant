@@ -60,7 +60,6 @@ async function getOpenAiSalesAssistant(){
 }
 exports.getOpenAiSalesAssistant = getOpenAiSalesAssistant;
 
-
 async function getVectorStore(assistant) {
     const fileStreams = [path.join(__dirname, "../../CaseStudies.md")].map((path) =>
         fs.createReadStream(path),
@@ -101,64 +100,61 @@ async function getVectorStore(assistant) {
         });
         console.log(`Vector Store "${vectorStoreName}" ID=${vectorStore.id} has been created`);
         storageUtils.writeToProgramStorageFn((data) => {
-            data.vectorStoreId = vectorStoreId;
+            data.vectorStoreId = vectorStore.id;
         })
     }
     console.log(`Using Vector Store "${vectorStoreName}" ID=${vectorStore.id}`);
     console.log("vectorStore", vectorStore);
 
-    const caseStudiesFileId = storageUtils.readProgramStorage().caseStudiesFileId;
-    let vectorStoreFile = null;
-    try {
-        if (caseStudiesFileId.trim() === '') {
-            let error = new Error('caseStudiesFileId not populated.');
-            error.status = 404;
-            throw error;
-        }
-        console.log(`Trying to find Vector File ${caseStudiesFileId} of Vector Store ${vectorStore.id}`);
-        vectorStoreFile = await openai.beta.vectorStores.files.retrieve(
-            vectorStore.id,
-            caseStudiesFileId,
-        );
-        
-    } catch (e) {
-        if (e.status !== 404) {
-            console.error(e);
-            return;
+
+    let assistantKnowledgeBaseFilesDir = path.join(__dirname, '../assistant-knowledge-files');
+    let files = fs.readdirSync(assistantKnowledgeBaseFilesDir);
+
+    const newKnowledgeBaseFilesNamesToIds = storageUtils.readProgramStorage().knowledgeBaseFilesNamesToIds;
+
+    for(let fileName of files) {
+        let filePath = path.join(assistantKnowledgeBaseFilesDir, fileName);
+        if (fs.statSync(filePath).isDirectory() === false) {
+            if (typeof newKnowledgeBaseFilesNamesToIds[fileName] === 'undefined' || !(newKnowledgeBaseFilesNamesToIds[fileName])) {
+                const fileUploaded = await openai.files.create({
+                    file: fs.createReadStream(filePath),
+                    purpose: "assistants",
+                });
+
+                let vectorStoreFile = await openai.beta.vectorStores.files.create(vectorStore.id, {
+                    file_id: fileUploaded.id,
+                });
+
+                console.log("vectorStoreFile", vectorStoreFile);
+
+                newKnowledgeBaseFilesNamesToIds[fileName] = fileUploaded.id;
+            } else {
+                
+            }
         }
     }
 
-    if (!vectorStoreFile) {
+    
 
-        
-        
-        console.log(`Vector File ${caseStudiesFileId} of Vector Store ${vectorStore.id} not found. Creating it...`);
-
-        const file = await openai.files.create({
-            file: fileStreams[0],
-            purpose: "assistants",
-        });
-
-        console.log("File", file);
-
-        let savedRecord = storageUtils.writeToProgramStorageFn((data) => {
-            data.caseStudiesFileId = file.id;
-        });
-
-        vectorStoreFile = await openai.beta.vectorStores.files.create(vectorStore.id, {
-            file_id: file.id,
-        });
-        console.log(vectorStoreFile);
-        console.log(`Vector File ${savedRecord.caseStudiesFileId} of Vector Store ${vectorStore.id} has been created`);
-    }
-
-    console.log(`Using Vector file ${vectorStoreFile.id}`, vectorStoreFile);
-
-    await openai.beta.assistants.update(assistant.id, {
-    tool_resources: { file_search: { vector_store_ids: [vectorStore.id] } },
+    storageUtils.writeToProgramStorageFn((data) => {
+        data.knowledgeBaseFilesNamesToIds = newKnowledgeBaseFilesNamesToIds;
     });
 
-    return {vectorStore, vectorStoreFile};
+    let openAiFileIds = storageUtils.getHashMapValues(newKnowledgeBaseFilesNamesToIds);
+
+    const myVectorStoreFileBatch = await openai.beta.vectorStores.fileBatches.create(
+        vectorStore.id,
+        {
+            file_ids: openAiFileIds
+        }
+    );
+    console.log("myVectorStoreFileBatch", myVectorStoreFileBatch);
+
+    await openai.beta.assistants.update(assistant.id, {
+        tool_resources: { file_search: { vector_store_ids: [vectorStore.id] } },
+    });
+
+    return {vectorStore};
 }
 exports.getVectorStore = getVectorStore;
 
@@ -190,7 +186,7 @@ function runThreadWithStream(threadId, assistantId, options){
     return new Promise((resolve, reject) => {
         let sourceIndex = 0;
         let allCitations = [];
-        let displayCitations = (options && options.displayCitations) ? options.displayCitations : false;
+        let displayCitations = (options && typeof options.displayCitations === 'boolean') ? options.displayCitations : false;
         let onTextReceived = (options && options.onTextReceived) ? options.onTextReceived : function(text){return;};
         let onTextFinished = (options && options.onTextFinished) ? options.onTextFinished : function(text){return;};
         let fileAnnotationsIdDict = {};
@@ -209,6 +205,7 @@ function runThreadWithStream(threadId, assistantId, options){
                 for (let annotation of annotations) {
 
                     if (displayCitations) {
+                        console.log('annotation', {annotation, text});
                         text = textDelta.value.replace(annotation.text, "[" + sourceIndex + "]");
                         const { file_citation } = annotation;
                         if (file_citation) {
@@ -237,7 +234,10 @@ function runThreadWithStream(threadId, assistantId, options){
             if (event.content[0].type === "text") {
                 
                 if (displayCitations) {
-                    console.log("\n" + allCitations.join("\n"));
+                    let citationsFooter = "\n\n" + allCitations.join("\n");
+                    let citationsFooterExtraLine = "\n\n" + allCitations.join("\n\n");
+                    process.stdout.write(citationsFooter);
+                    onTextReceived(citationsFooterExtraLine);
                 }
                 
                 const { text } = event.content[0];
@@ -297,7 +297,7 @@ exports.runThreadWithStream = runThreadWithStream;
 async function initateConversationWithOpenAiAssistant(query){
 
     let assistant = await getOpenAiSalesAssistant();
-    let {vectorStore, vectorStoreFile} = await getVectorStore(assistant);
+    await getVectorStore(assistant);
     let thread = await createThread(query);
 
     return thread;
@@ -312,7 +312,7 @@ async function sendMessageToThread(threadId, userMessage, options) {
         { role: "user", content: userMessage }
     );
 
-    let displayCitations = (options && options.displayCitations) ? options.displayCitations : false;
+    let displayCitations = (options && typeof options.displayCitations === 'boolean') ? options.displayCitations : false;
     let onTextReceived = (options && options.onTextReceived) ? options.onTextReceived : function(text){return;};
     let onTextFinished = (options && options.onTextFinished) ? options.onTextFinished : function(text){return;};
 

@@ -95,15 +95,7 @@
           if (!messageElement) {
             messageElement = document.createElement('li');
             messageElement.id = logId;
-            console.log("converter.makeHtml(text)", converter.makeHtml(text));
-            let wrapperHtml = document.createElement('DIV');
-            wrapperHtml.innerHTML = converter.makeHtml(text);
-
-            if (wrapperHtml.firstChild) {
-              messageElement.innerHTML = wrapperHtml.firstChild.innerHTML;
-            } else {
-              console.log("DOEST NOT FIRST CHILD", wrapperHtml);
-            }
+            messageElement.innerHTML = converter.makeHtml(accumulatedText);
             
             messages.appendChild(messageElement);
             let inputChat = document.getElementById('input');

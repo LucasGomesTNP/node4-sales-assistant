@@ -1,5 +1,18 @@
 {
   "assistantId": "asst_CHoGYZrf7NcIHZ1OSgBKOPGE",
-  "vectorStoreId": "vs_8aQ9d6cQTsLWPDOhVTXhxTF9",
-  "caseStudiesFileId": "file-OVqbPwwogERZtkLuEdvhF5x4"
+  "vectorStoreId": "vs_XRyVbP5wehfL50tV4SydoJTD",
+  "caseStudiesFileId": "file-OVqbPwwogERZtkLuEdvhF5x4",
+  "knowledgeBaseFilesNamesToIds": {
+    "Case Study - ArrowXL.md": "file-hEAYskju6BVqgkklcShczW8o",
+    "Case Study - Datalex.md": "file-vMqoL4MuYRGxDU33LyCfi754",
+    "Case Study - East Sussex Fire and Rescue Service.md": "file-YBn17oMBIX2bVafDxLiiNuv5",
+    "Case Study - Essex County Council.md": "file-tFaYK9vECEbGxYtmbMV4IqwH",
+    "Case Study - ESSEX COUNTY FIRE & RESCUE SERVICE.md": "file-5Q4xchwIRncoVYulqIuTf31Y",
+    "Case Study - Jisc.md": "file-Xr5qIw2evXNK4hWvT2x4oXpZ",
+    "Case Study - Stephensons.md": "file-0GXZ4P6j4eEsMhNKDpyJmocN",
+    "Case Study - Warwichshire Police Force.md": "file-nD2qy8WDztuyuzIdgppVdj9M",
+    "Case Study - Weleda.md": "file-JiMlbMA4hGHlVu3mC8uhDTmQ",
+    "Case Study - West Midland Trains.md": "file-g3qseT97ru1oQkh21vDjoAV7",
+    "Case Study - West Midlands Police Force.md": "file-e0MNfDjWrrGzTq1kmPvTe7bI"
+  }
 }

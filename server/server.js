@@ -55,7 +55,8 @@ io.on('connection', async (socket) => {
       salesAssistantHandler.sendMessageToThread(threadId, text, {
         onTextReceived: function(textRecived){
           socket.emit('partial_ai_chat_message', {logId: logId, text: textRecived});
-        }
+        },
+        displayCitations: true
       })
       .then((e) => {
         console.log("MESSAGE COMPLETED");
