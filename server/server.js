@@ -13,6 +13,17 @@ const server = createServer(app);
 const io = new Server(server);
 
 
+
+function getParameterValue(param){
+  let paramIndex = Array.from(process.argv).findIndex((e) => e === `--${param}`);
+  if (paramIndex === -1) {
+      return "";
+  }
+  return process.argv[paramIndex + 1];
+}
+
+
+
 app.use(express.static('app'));
 /*
 app.get('/', (req, res) => {
@@ -71,7 +82,7 @@ io.on('connection', async (socket) => {
 
 });
   
-
-server.listen(3000, () => {
-  console.log('server running at http://localhost:3000');
+const port = getParameterValue('port') || 3000;
+server.listen(port, () => {
+  console.log(`server running at http://localhost:${port}`);
 });
