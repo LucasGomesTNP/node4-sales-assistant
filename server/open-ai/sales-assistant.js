@@ -200,13 +200,15 @@ function runThreadWithStream(threadId, assistantId, options){
         .on('textDelta', async (textDelta, snapshot) => {
             let text = textDelta.value;
             const { annotations } = textDelta;
-
             if (annotations) {
                 for (let annotation of annotations) {
-
+                    
                     if (displayCitations) {
                         console.log('annotation', {annotation, text});
-                        text = textDelta.value.replace(annotation.text, "[" + sourceIndex + "]");
+                        // Displaying citations while receiving the stream is not fully working.
+                        // So we are removing from the main text.
+                        // text = textDelta.value.replace(annotation.text, "[" + sourceIndex + "]");
+                        text = textDelta.value.replace(annotation.text, "");
                         const { file_citation } = annotation;
                         if (file_citation) {
                             let fileName = fileAnnotationsIdDict[file_citation.file_id];
@@ -225,8 +227,8 @@ function runThreadWithStream(threadId, assistantId, options){
                     }
                 }
             }
-
-
+            
+            
             //process.stdout.write(text);
             onTextReceived(text);
         })
@@ -274,10 +276,9 @@ function runThreadWithStream(threadId, assistantId, options){
                         text.value = text.value.replace(annotation.text, "");
                     }
                 }
-
                 let allText = text.value;
                 if (displayCitations) {
-                    allText += "\n" + citations.join("\n");
+                    allText += "\n\n" + citations.join("\n\n");
                 }
 
                 onTextFinished(allText);

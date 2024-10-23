@@ -116,8 +116,8 @@
 
         socket.on('ai_chat_message_done', function(messageInfo){
           const {logId, text} = messageInfo;
-          //let messageElement = document.querySelector('#' + logId);
-          //messageElement.innerHTML = converter.makeHtml(text);
+          let messageElement = document.querySelector('#' + logId);
+          messageElement.innerHTML = converter.makeHtml(text);
           console.log("text done", text);
           console.log("accumulated Text", accumulatedText);
           let inputChat = document.getElementById('input');
